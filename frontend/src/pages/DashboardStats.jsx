@@ -25,7 +25,7 @@ const DashboardStats = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/agendas/history', {
+                const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/history', {
                     headers: { 'x-auth-token': token }
                 });
                 
@@ -65,7 +65,7 @@ const DashboardStats = () => {
         if (!newUpdate.trim()) return;
         setUpdating(true);
         try {
-            const res = await axios.patch(`http://localhost:5000/api/agendas/update-progress/${id}`, 
+            const res = await axios.patch(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/update-progress/${id}`, 
                 { updateText: newUpdate },
                 { headers: { 'x-auth-token': token } }
             );
@@ -84,7 +84,7 @@ const DashboardStats = () => {
         if (!window.confirm("Is this task fully completed? It will move to history.")) return;
         
         try {
-            await axios.patch(`http://localhost:5000/api/agendas/complete-task/${id}`, {}, {
+            await axios.patch(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/complete-task/${id}`, {}, {
                 headers: { 'x-auth-token': token }
             });
             

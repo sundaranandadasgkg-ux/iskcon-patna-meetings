@@ -19,7 +19,7 @@ const AgendaForm = () => {
                 headers: { 'x-auth-token': token }
             };
 
-            await axios.post('http://localhost:5000/api/agendas/submit', 
+            await axios.post('http://iskcon-patna-meetings-1.onrender.com/api/agendas/submit', 
                 { title, description, priority, panel }, config);
 
             alert("Prabhu ji, Agenda Submit ho gaya hai! (Pending for Approval)");

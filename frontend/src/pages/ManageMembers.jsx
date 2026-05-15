@@ -11,7 +11,7 @@ const ManageMembers = () => {
     // 1. Data Fetch Karne ka function
     const fetchMembers = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/members/all', {
+            const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/members/all', {
                 headers: { 'x-auth-token': token }
             });
             setMembers(res.data);
@@ -30,7 +30,7 @@ const ManageMembers = () => {
     const handleDelete = async (id) => {
         if (window.confirm("Bhai, kya aap sach mein is member ko hatana chahte hain?")) {
             try {
-                await axios.delete(`http://localhost:5000/api/members/${id}`, {
+                await axios.delete(`http://iskcon-patna-meetings-1.onrender.com/api/members/${id}`, {
                     headers: { 'x-auth-token': token }
                 });
                 setMembers(members.filter(m => m._id !== id)); // List se turant hata do

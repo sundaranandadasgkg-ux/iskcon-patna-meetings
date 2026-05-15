@@ -24,7 +24,7 @@ const Register = () => {
 
         try {
             // Backend API call (Route aapke setup ke hisaab se check kar lein)
-            const res = await axios.post('http://localhost:5000/api/members/register', formData);
+            const res = await axios.post('http://iskcon-patna-meetings-1.onrender.com/api/members/register', formData);
             setMessage({ type: 'success', text: 'User Registered Successfully!' });
             // Form reset
             setFormData({ name: '', email: '', password: '', role: 'member', department: 'General' });

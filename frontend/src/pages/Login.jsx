@@ -13,7 +13,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/members/login', { email, password });
+            const res = await axios.post('http://iskcon-patna-meetings-1.onrender.com/api/members/login', { email, password });
             setToken(res.data.token);
             setUser(res.data.user);
             localStorage.setItem('token', res.data.token);

@@ -15,8 +15,8 @@ const MeetingFloor = () => {
                 const config = { headers: { 'x-auth-token': token } };
 
                 const [agendaRes, userRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/agendas/approved-for-meeting', config),
-                    axios.get('http://localhost:5000/api/members/all', config)
+                    axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/approved-for-meeting', config),
+                    axios.get('http://iskcon-patna-meetings-1.onrender.com/api/members/all', config)
                 ]);
 
                 const normalizedData = agendaRes.data.map(a => ({
@@ -54,7 +54,7 @@ const MeetingFloor = () => {
             };
 
             await axios.patch(
-                `http://localhost:5000/api/agendas/update-meeting-details/${agenda._id}`, 
+                `http://iskcon-patna-meetings-1.onrender.com/api/agendas/update-meeting-details/${agenda._id}`, 
                 updateData, 
                 config
             );
@@ -75,7 +75,7 @@ const MeetingFloor = () => {
 
         try {
             const token = localStorage.getItem('token');
-            await axios.patch(`http://localhost:5000/api/agendas/move-to-dashboard/${agenda._id}`, {
+            await axios.patch(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/move-to-dashboard/${agenda._id}`, {
                 status: 'discussed',
                 meetingNotes: agenda.meetingNotes, 
                 responsiblePerson: agenda.responsiblePerson,

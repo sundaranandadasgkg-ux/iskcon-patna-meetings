@@ -5,7 +5,7 @@ const UserManagement = ({ token }) => {
     const [users, setUsers] = useState([]);
 
     const fetchUsers = async () => {
-        const res = await axios.get('http://localhost:5000/api/users/all', {
+        const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/users/all', {
             headers: { 'x-auth-token': token }
         });
         setUsers(res.data);
@@ -14,7 +14,7 @@ const UserManagement = ({ token }) => {
     const toggleRole = async (userId, currentRole) => {
         const newRole = currentRole === 'admin' ? 'member' : 'admin';
         try {
-            await axios.put(`http://localhost:5000/api/users/update-role/${userId}`, 
+            await axios.put(`http://iskcon-patna-meetings-1.onrender.com/api/users/update-role/${userId}`, 
                 { role: newRole }, 
                 { headers: { 'x-auth-token': token } }
             );

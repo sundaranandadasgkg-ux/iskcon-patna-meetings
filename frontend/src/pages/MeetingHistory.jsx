@@ -12,7 +12,7 @@ const MeetingHistory = () => {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/agendas/final-history', {
+                const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/final-history', {
                     headers: { 'x-auth-token': token }
                 });
                 
@@ -39,7 +39,7 @@ const MeetingHistory = () => {
         if (!window.confirm("Is agenda ko wapas Discussion Floor par bhejna hai?")) return;
         try {
             // URL mein '/admin' add kar diya hai aapke backend route ke hisaab se
-            await axios.patch(`http://localhost:5000/api/agendas/admin/update-status/${id}`, 
+            await axios.patch(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/admin/update-status/${id}`, 
                 { status: 'approved' }, 
                 { headers: { 'x-auth-token': token } }
             );
@@ -57,7 +57,7 @@ const MeetingHistory = () => {
     const handleDelete = async (id) => {
         if (!window.confirm("Kya aap sure hain? Ye agenda hamesha ke liye delete ho jayega!")) return;
         try {
-            await axios.delete(`http://localhost:5000/api/agendas/${id}`, {
+            await axios.delete(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/${id}`, {
                 headers: { 'x-auth-token': token }
             });
             setHistory(prev => prev.filter(item => item._id !== id));

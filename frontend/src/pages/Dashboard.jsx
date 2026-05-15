@@ -18,7 +18,7 @@ const Dashboard = () => {
 
     const fetchHistory = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/agendas/me', {
+            const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/me', {
                 headers: { 'x-auth-token': token }
             });
             // Humesha check karein ki res.data ek array hai

@@ -11,7 +11,7 @@ const AdminApproval = () => {
     const fetchPending = async () => {
         try {
             // AAPKE BACKEND ROUTE #3 KE HISAB SE
-            const res = await axios.get('http://localhost:5000/api/agendas/admin/pending', {
+            const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/admin/pending', {
                 headers: { 'x-auth-token': token }
             });
             setPendingList(res.data);
@@ -27,7 +27,7 @@ const AdminApproval = () => {
     const handleStatusUpdate = async (id, newStatus) => {
         try {
             // AAPKE BACKEND ROUTE #4 KE HISAB SE (PATCH use kiya hai aapne)
-            await axios.patch(`http://localhost:5000/api/agendas/admin/update-status/${id}`, 
+            await axios.patch(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/admin/update-status/${id}`, 
                 { status: newStatus },
                 { headers: { 'x-auth-token': token } }
             );

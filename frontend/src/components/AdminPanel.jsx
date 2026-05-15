@@ -5,14 +5,14 @@ const AdminPanel = ({ token }) => {
     const [pending, setPending] = useState([]);
 
     const loadPending = async () => {
-        const res = await axios.get('http://localhost:5000/api/agendas/admin/pending', {
+        const res = await axios.get('http://iskcon-patna-meetings-1.onrender.com/api/agendas/admin/pending', {
             headers: { 'x-auth-token': token }
         });
         setPending(res.data);
     };
 
     const approve = async (id) => {
-        await axios.put(`http://localhost:5000/api/agendas/approve/${id}`, { status: 'approved' }, {
+        await axios.put(`http://iskcon-patna-meetings-1.onrender.com/api/agendas/approve/${id}`, { status: 'approved' }, {
             headers: { 'x-auth-token': token }
         });
         loadPending(); // Refresh list
