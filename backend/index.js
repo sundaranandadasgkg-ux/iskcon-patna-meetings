@@ -10,7 +10,10 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+    origin: 'https://iskcon-patna-meetings-1.onrender.com' // Yahan apna live frontend URL dalein
+}));
 
 app.use('/api/agendas', agendaRoutes); // Sabhi agenda routes yahan se shuru honge
 app.use('/api/members', memberRoutes);
