@@ -16,9 +16,12 @@ const Login = () => {
             const res = await axios.post('http://localhost:5000/api/members/login', { email, password });
             setToken(res.data.token);
             setUser(res.data.user);
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('user', JSON.stringify(res.data.user));
             alert("Haribol! Login Successful.");
             navigate('/dashboard'); // Ye user ko dashboard par le jayega
         } catch (err) {
+
             alert(err.response?.data?.msg || "Login failed");
         }
     };

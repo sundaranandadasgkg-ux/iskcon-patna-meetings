@@ -17,9 +17,12 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
     // Login ke waqt aapka backend jo data bhejta hai, wo isi 'user' mein hota hai.
     const { user, logout } = useContext(AuthContext); 
 
+
+
+
     // 2. Role ko handle karein (Schema ke hisaab se 'role' small letters mein)
     const userRole = user?.role; 
-
+    console.log("Current User in Sidebar:", user);
 
     const menuItems = [
         { id: 'dashboard', name: 'Dashboard', icon: <LayoutDashboard size={20}/> },
