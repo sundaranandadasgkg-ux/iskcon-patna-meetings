@@ -46,7 +46,17 @@ const AgendaSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+
+    progressUpdates: [
+    {
+        text: String,
+        updatedAt: { type: Date, default: Date.now },
+        updatedBy: String // Agar aap user ka naam track karna chahte hain
     }
+    ],
+
+    dueDate: { type: Date },
 });
 
 module.exports = mongoose.model('Agenda', AgendaSchema);

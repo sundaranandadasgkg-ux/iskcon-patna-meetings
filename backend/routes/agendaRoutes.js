@@ -7,7 +7,7 @@ const { auth, checkRole } = require('../middleware/auth');
 // 1. Submit a New Agenda (By Member)
 router.post('/submit', auth, async (req, res) => {
     try {
-        const { title, description, priority, panel } = req.body;
+        const { title, description, priority, panel, } = req.body;
 
         const newAgenda = new Agenda({
             title,
@@ -21,6 +21,7 @@ router.post('/submit', auth, async (req, res) => {
         const savedAgenda = await newAgenda.save();
         res.status(201).json({ message: "Agenda submitted for approval!", data: savedAgenda });
     } catch (err) {
+        
         res.status(500).json({ error: err.message });
     }
 });
@@ -39,7 +40,7 @@ router.get('/history', auth, async (req, res) => {
 
 // 3. Admin: Get all Pending Agendas
 router.get('/admin/pending', auth, checkRole(['admin']), async (req, res) => {
-    console.log("Admin Pending Route Hit!");
+    
     try {
         const pendingAgendas = await Agenda.find({ status: 'pending' })
             .populate('submittedBy', 'name role')
@@ -82,7 +83,9 @@ router.get('/on-floor', auth, async (req, res) => {
 // 6. PUT: Update Agenda during/after Meeting
 router.put('/meeting/update/:id', auth, checkRole(['admin', 'tmc']), async (req, res) => {
     try {
-        const { meetingNotes, responsiblePerson, department } = req.body;
+
+        
+        const { meetingNotes, responsiblePerson, department, dueDate } = req.body;
 
         const updatedAgenda = await Agenda.findByIdAndUpdate(
             req.params.id,
@@ -90,6 +93,7 @@ router.put('/meeting/update/:id', auth, checkRole(['admin', 'tmc']), async (req,
                 meetingNotes,
                 responsiblePerson,
                 department,
+                dueDate,
                 status: 'discussed' // Discussion khatam hote hi status badal jayega
             },
             { new: true }
@@ -100,6 +104,7 @@ router.put('/meeting/update/:id', auth, checkRole(['admin', 'tmc']), async (req,
             data: updatedAgenda 
         });
     } catch (err) {
+        
         res.status(500).json({ error: err.message });
     }
 });
@@ -116,24 +121,29 @@ router.get('/approved-for-meeting', auth, async (req, res) => {
 });
 
 // 8. Meeting Tab: Update agenda with Discussion Notes (TMC/Admin only)
-router.patch('/update-meeting-details/:id', auth, checkRole(['admin', 'tmc']), async (req, res) => {
+// Route: /update-meeting-details/:id
+router.patch('/update-meeting-details/:id', auth, async (req, res) => {
     try {
-        const { meetingNotes, responsiblePerson, department } = req.body;
+        const { meetingNotes, responsiblePerson, dueDate } = req.body;
         
         const updatedAgenda = await Agenda.findByIdAndUpdate(
             req.params.id,
             { 
-                meetingNotes, 
-                responsiblePerson, 
-                department,
-                status: 'discussed' // Discussion ke baad status badal jayega
+                $set: { 
+                    meetingNotes: meetingNotes,
+                    responsiblePerson: responsiblePerson,
+                    dueDate: dueDate
+                } 
             },
-            { new: true }
+            { new: true } // Taaki update hone ke baad naya data return kare
         );
+
+        if (!updatedAgenda) return res.status(404).json({ msg: "Agenda not found" });
         
-        res.status(200).json({ message: "Meeting details updated!", data: updatedAgenda });
+        res.status(200).json(updatedAgenda);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err.message);
+        res.status(500).send("Server Error");
     }
 });
 
@@ -157,6 +167,76 @@ router.get('/me', auth, async (req, res) => {
         res.json(myAgendas);
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// Naya progress update add karne ke liye
+router.patch('/update-progress/:id', auth, async (req, res) => {
+    try {
+        const { updateText } = req.body;
+        const updatedAgenda = await Agenda.findByIdAndUpdate(
+            req.params.id,
+            { 
+                $push: { 
+                    progressUpdates: { 
+                        text: updateText, 
+                        updatedAt: new Date() 
+                    } 
+                } 
+            },
+            { new: true }
+        );
+        res.json(updatedAgenda);
+    } catch (err) {
+        res.status(500).send("Server Error");
+    }
+});
+
+// Backend: routes/agendas.js
+router.patch('/complete-task/:id', auth, async (req, res) => {
+    try {
+        const updated = await Agenda.findByIdAndUpdate(
+            req.params.id,
+            { status: 'completed' }, // Status change to completed
+            { returnDocument: 'after' }
+        );
+        res.json(updated);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.delete('/:id', auth, async (req, res) => {
+    if (req.user.role !== 'admin') return res.status(403).json({ msg: "Not authorized" });
+    await Agenda.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Deleted" });
+});
+
+// Jab agenda discussion se dashboard par move hota hai
+// Route: /move-to-dashboard/:id
+router.patch('/move-to-dashboard/:id', auth, async (req, res) => {
+    try {
+        const { meetingNotes, responsiblePerson, dueDate } = req.body;
+
+        const updatedAgenda = await Agenda.findByIdAndUpdate(
+            req.params.id,
+            { 
+                $set: { 
+                    status: 'discussed', // Status yahan badal raha hai
+                    meetingNotes: meetingNotes,
+                    responsiblePerson: responsiblePerson,
+                    dueDate: dueDate
+                } 
+            },
+            { new: true }
+        );
+
+        if (!updatedAgenda) return res.status(404).json({ msg: "Agenda not found" });
+
+        res.status(200).json({ message: "Moved to Dashboard", data: updatedAgenda });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Server Error");
     }
 });
 
